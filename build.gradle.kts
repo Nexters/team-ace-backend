@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.5.3"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
 group = "com.nexters"
@@ -37,6 +38,10 @@ dependencies {
 
     // spring validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // restdocs-api-spec
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
 
 tasks.withType<Test> {
@@ -47,7 +52,10 @@ tasks.test {
     outputs.dir(project.extra["snippetsDir"]!!)
 }
 
-tasks.asciidoctor {
-    inputs.dir(project.extra["snippetsDir"]!!)
-    dependsOn(tasks.test)
+openapi3 {
+    title = "Gamchi API"
+    description = "Swagger Docs"
+    version = "0.0.1"
+    format = "yaml"
+    outputFileNamePrefix = "openapi3"
 }
