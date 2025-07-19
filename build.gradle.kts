@@ -4,6 +4,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("com.epages.restdocs-api-spec") version "0.19.4"
+    id("com.diffplug.spotless") version "7.1.0"
 }
 
 group = "com.nexters"
@@ -18,6 +19,17 @@ java {
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    encoding("UTF-8")
+    java {
+        toggleOffOn()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        googleJavaFormat()
     }
 }
 
@@ -44,12 +56,18 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+tasks {
+    compileJava {
+        dependsOn("spotlessApply")
+    }
 
-tasks.test {
-    outputs.dir(project.extra["snippetsDir"]!!)
+    withType<Test> {
+        useJUnitPlatform()
+    }
+
+    test {
+        outputs.dir(project.extra["snippetsDir"]!!)
+    }
 }
 
 openapi3 {

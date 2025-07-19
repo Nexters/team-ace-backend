@@ -1,5 +1,3 @@
 package com.nexters.teamace.chat.presentation;
 
-public record ChatRequest(String userId) {
-
-}
+public record ChatRequest(String userId) {}

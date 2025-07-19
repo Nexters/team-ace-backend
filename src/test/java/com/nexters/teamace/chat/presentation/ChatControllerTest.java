@@ -31,10 +31,9 @@ class ChatControllerTest extends ControllerTest {
     final ChatResponse response = new ChatResponse(1L);
 
     // when
-    final ResultActions resultActions = mockMvc.perform(
-        post("/api/v1/chats")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(requestBody));
+    final ResultActions resultActions =
+        mockMvc.perform(
+            post("/api/v1/chats").contentType(MediaType.APPLICATION_JSON).content(requestBody));
 
     // then
     resultActions
@@ -59,9 +58,7 @@ class ChatControllerTest extends ControllerTest {
                             fieldWithPath("success")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("성공 여부"),
-                            fieldWithPath("data")
-                                .type(JsonFieldType.OBJECT)
-                                .description("응답 데이터"),
+                            fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
                             fieldWithPath("data.chatId")
                                 .type(JsonFieldType.NUMBER)
                                 .description("생성된 채팅 ID"),
