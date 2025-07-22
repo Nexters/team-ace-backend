@@ -19,6 +19,10 @@ jobs:
           java-version: '24'
           distribution: 'oracle'
 
+      - name: Replace placeholders with secrets
+        run: |
+          sed -i 's/${JWT_SECRET:[^}]*}/${{ secrets.JWT_SECRET }}/g' src/main/resources/application.yml
+
       - name: Setup Gradle cache
         uses: actions/cache@v4
         with:
