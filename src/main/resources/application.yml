@@ -1,6 +1,12 @@
 spring:
   application:
     name: team-ace-backend
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/gamchi
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234}
+
 
 jwt:
   secret: ${JWT_SECRET:dGVhbS1hY2UtYmFja2VuZC1kZWZhdWx0LXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=}
