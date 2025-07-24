@@ -51,6 +51,10 @@ dependencies {
     // spring validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // db
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("com.mysql:mysql-connector-j")
+
     // spring security
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
