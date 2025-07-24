@@ -1,8 +1,14 @@
 spring:
   application:
     name: team-ace-backend-test
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8://testDB
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 
 jwt:
   secret: dGVhbS1hY2UtYmFja2VuZC1kZWZhdWx0LXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=

@@ -70,6 +70,11 @@ dependencies {
 
     // fixture monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.4")
+
+    // testcontainers
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:mysql")
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks {
