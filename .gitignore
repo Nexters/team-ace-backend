@@ -41,3 +41,6 @@ application-local.yml
 
 ## Environment ##
 prompts/.env
+
+## DB ##
+data/
