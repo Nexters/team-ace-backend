@@ -1,6 +1,8 @@
 spring:
   application:
     name: team-ace-backend-test
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 jwt:
   secret: dGVhbS1hY2UtYmFja2VuZC1kZWZhdWx0LXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50LW9ubHk=
