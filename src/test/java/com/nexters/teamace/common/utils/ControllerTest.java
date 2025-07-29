@@ -8,10 +8,12 @@ import com.nexters.teamace.auth.application.TokenService;
 import com.nexters.teamace.auth.config.SecurityConfig;
 import com.nexters.teamace.auth.infrastructure.security.JwtAuthenticationFilter;
 import com.nexters.teamace.auth.infrastructure.security.SecurityErrorHandler;
+import com.nexters.teamace.auth.presentation.AuthUserArgumentResolver;
 import com.nexters.teamace.chat.application.ChatRoomService;
 import com.nexters.teamace.common.presentation.GlobalExceptionHandler;
 import com.nexters.teamace.conversation.application.ConversationClient;
 import com.nexters.teamace.conversation.application.ConversationService;
+import com.nexters.teamace.fairy.application.FairyService;
 import com.nexters.teamace.user.application.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -39,6 +41,8 @@ public abstract class ControllerTest {
     @MockitoBean protected UserService userService;
     @MockitoBean protected ConversationService conversationService;
     @MockitoBean protected ConversationClient conversationClient;
+    @MockitoBean protected FairyService fairyService;
+    @MockitoBean protected AuthUserArgumentResolver authUserArgumentResolver;
 
     protected Object asParsedJson(Object obj) throws JsonProcessingException {
         String json = objectMapper.writeValueAsString(obj);
