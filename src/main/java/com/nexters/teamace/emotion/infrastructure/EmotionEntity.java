@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "emotion")
+@Table(name = "emotions")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmotionEntity {

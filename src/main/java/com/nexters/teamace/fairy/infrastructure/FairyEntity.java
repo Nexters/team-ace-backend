@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "fairy")
+@Table(name = "fairies")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FairyEntity {
