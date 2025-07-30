@@ -1,9 +1,9 @@
 package com.nexters.teamace.auth.presentation;
 
 import com.nexters.teamace.common.presentation.AuthUser;
+import com.nexters.teamace.common.presentation.UserInfo;
 import com.nexters.teamace.user.application.GetUserResult;
 import com.nexters.teamace.user.application.UserService;
-import com.nexters.teamace.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
@@ -41,6 +41,6 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         GetUserResult userResult = userService.getUserByUsername(userDetails.getUsername());
-        return new User(userResult.id(), userResult.username(), userResult.nickname());
+        return new UserInfo(userResult.id(), userResult.username(), userResult.nickname());
     }
 }

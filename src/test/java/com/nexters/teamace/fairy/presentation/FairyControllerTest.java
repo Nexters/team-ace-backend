@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.nexters.teamace.common.presentation.UserInfo;
 import com.nexters.teamace.common.utils.ControllerTest;
 import com.nexters.teamace.fairy.application.FairyCandidate;
 import com.nexters.teamace.fairy.application.FairyResult;
@@ -36,15 +37,16 @@ class FairyControllerTest extends ControllerTest {
         long chatRoomId = 100L;
         User user = new User("test-user", "테스트유저");
 
+        given(authUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(authUserArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(user);
+                .willReturn(new UserInfo(1L, "test-user", "테스트유저"));
 
         List<FairyCandidate> candidates =
                 List.of(new FairyCandidate(1L, "눈물방울 요정", "sad.png", "sad_sil.png", "슬픔"));
         List.of(new FairyCandidate(1L, "분노끄아앙 요정", "angry.png", "angry_sil.png", "분노"));
         FairyResult fairyResult = new FairyResult(candidates);
 
-        given(fairyService.getFairy(any(User.class), any(Long.class))).willReturn(fairyResult);
+        given(fairyService.getFairy(any(UserInfo.class), any(Long.class))).willReturn(fairyResult);
 
         // when
         ResultActions resultActions =

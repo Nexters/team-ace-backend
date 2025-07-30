@@ -1,6 +1,7 @@
 package com.nexters.teamace.fairy.application;
 
 import com.nexters.teamace.chat.application.ChatRoomService;
+import com.nexters.teamace.common.presentation.UserInfo;
 import com.nexters.teamace.conversation.application.ConversationContext;
 import com.nexters.teamace.conversation.application.ConversationService;
 import com.nexters.teamace.conversation.domain.ConversationType;
@@ -9,7 +10,6 @@ import com.nexters.teamace.emotion.application.EmotionService;
 import com.nexters.teamace.emotion.domain.Emotion;
 import com.nexters.teamace.fairy.domain.Fairy;
 import com.nexters.teamace.fairy.domain.FairyRepository;
-import com.nexters.teamace.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class FairyService {
     private final EmotionService emotionService;
     private final FairyRepository fairyRepository;
 
-    public FairyResult getFairy(User user, Long chatRoomId) {
+    public FairyResult getFairy(UserInfo user, Long chatRoomId) {
         /* 1. chatRoomId 기반으로 chatRoom의 모든 질의응답 조회 (TODO)
          * context 데이터는 아래와 같이 구성해서 던져줄지?
          * 1. 상담가: 데이터1
