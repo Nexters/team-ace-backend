@@ -1,12 +1,10 @@
 package com.nexters.teamace.emotion.infrastructure;
 
-import jakarta.persistence.Column;
+import com.nexters.teamace.common.infrastructure.entity.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,18 +12,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "emotions")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EmotionEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emotion_id")
-    private Long id;
+public class EmotionEntity extends BaseEntity {
 
     private String name;
 
     private String description;
 
-    public EmotionEntity(String name, String description) {
+    @Builder
+    public EmotionEntity(long id, String name, String description) {
+        super(id);
         this.name = name;
         this.description = description;
     }
