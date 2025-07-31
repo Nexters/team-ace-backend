@@ -6,10 +6,9 @@ import com.nexters.teamace.conversation.application.ConversationContext;
 import com.nexters.teamace.conversation.application.ConversationService;
 import com.nexters.teamace.conversation.domain.ConversationType;
 import com.nexters.teamace.conversation.domain.EmotionSelectConversation;
-import com.nexters.teamace.emotion.application.EmotionService;
-import com.nexters.teamace.emotion.domain.Emotion;
-import com.nexters.teamace.fairy.domain.Fairy;
+import com.nexters.teamace.fairy.application.dto.FairyInfo;
 import com.nexters.teamace.fairy.domain.FairyRepository;
+import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class FairyService {
 
     private final ConversationService conversationService;
     private final ChatRoomService chatRoomService;
-    private final EmotionService emotionService;
     private final FairyRepository fairyRepository;
 
     public FairyResult getFairy(UserInfo user, Long chatRoomId) {
@@ -39,29 +37,27 @@ public class FairyService {
                 (EmotionSelectConversation)
                         conversationService.chat(type.getType(), type, context, "");
 
-        // 3. 감정 후보 기반으로 emotion 조회
-        List<Emotion> emotions =
-                emotionService.findAllByNamesIn(
+        // 3. 감정 후보 기반으로 fairy 후보 조회
+        List<FairyProjection> fairyProjections =
+                fairyRepository.findAllByEmotionNames(
                         emotionSelectConversation.emotions().stream()
                                 .map(EmotionSelectConversation.Emotions::name)
                                 .toList());
 
-        // 4. emotion 기반으로 fairy 조회 (fairy -> emotion의 단방향 참조를 유지하고 싶다면?)
-        List<Fairy> fairies =
-                fairyRepository.findAllByEmotionIdIn(
-                        emotions.stream().map(Emotion::getId).toList());
+        // 4. FairyInfo로 변환
+        List<FairyInfo> fairyInfos =
+                fairyProjections.stream()
+                        .map(
+                                p ->
+                                        new FairyInfo(
+                                                p.id(),
+                                                p.name(),
+                                                p.image(),
+                                                p.silhouetteImage(),
+                                                p.emotion()))
+                        .toList();
 
         // 5. FairyResult에 맞게 정제하여 반환
-        return new FairyResult(
-                fairies.stream()
-                        .map(
-                                f ->
-                                        new FairyCandidate(
-                                                f.getId(),
-                                                f.getName(),
-                                                f.getImageUrl(),
-                                                f.getSilhouetteImageUrl(),
-                                                f.getEmotion().getName()))
-                        .toList());
+        return new FairyResult(fairyInfos);
     }
 }

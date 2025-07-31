@@ -2,7 +2,6 @@ package com.nexters.teamace.fairy.domain;
 
 import static lombok.AccessLevel.PROTECTED;
 
-import com.nexters.teamace.emotion.domain.Emotion;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,17 +13,17 @@ public class Fairy {
     private String name;
     private String imageUrl;
     private String silhouetteImageUrl;
-    private Emotion emotion;
+    private Long emotionId;
 
     public Fairy(
             final String name,
             final String imageUrl,
             final String silhouetteImageUrl,
-            final Emotion emotion) {
+            final Long emotionId) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.silhouetteImageUrl = silhouetteImageUrl;
-        this.emotion = emotion;
+        this.emotionId = emotionId;
     }
 
     public Fairy(
@@ -32,11 +31,11 @@ public class Fairy {
             final String name,
             final String imageUrl,
             final String silhouetteImageUrl,
-            final Emotion emotion) {
+            final Long emotionId) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
         this.silhouetteImageUrl = silhouetteImageUrl;
-        this.emotion = emotion;
+        this.emotionId = emotionId;
     }
 }

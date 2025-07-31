@@ -15,36 +15,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.nexters.teamace.common.annotation.WithMockCustomUser;
 import com.nexters.teamace.common.presentation.UserInfo;
 import com.nexters.teamace.common.utils.ControllerTest;
-import com.nexters.teamace.fairy.application.FairyCandidate;
 import com.nexters.teamace.fairy.application.FairyResult;
-import com.nexters.teamace.user.domain.User;
+import com.nexters.teamace.fairy.application.dto.FairyInfo;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 class FairyControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("인증된 사용자는 요정 추천을 받을 수 있다")
-    @WithMockUser
+    @WithMockCustomUser
     void getFairy_success() throws Exception {
         // given
         long chatRoomId = 100L;
-        User user = new User("test-user", "테스트유저");
 
         given(authUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(authUserArgumentResolver.resolveArgument(any(), any(), any(), any()))
                 .willReturn(new UserInfo(1L, "test-user", "테스트유저"));
 
-        List<FairyCandidate> candidates =
-                List.of(new FairyCandidate(1L, "눈물방울 요정", "sad.png", "sad_sil.png", "슬픔"));
-        List.of(new FairyCandidate(1L, "분노끄아앙 요정", "angry.png", "angry_sil.png", "분노"));
-        FairyResult fairyResult = new FairyResult(candidates);
+        List<FairyInfo> fairyInfos =
+                List.of(new FairyInfo(1L, "눈물방울 요정", "sad.png", "sad_sil.png", "슬픔"));
+        FairyResult fairyResult = new FairyResult(fairyInfos);
 
         given(fairyService.getFairy(any(UserInfo.class), any(Long.class))).willReturn(fairyResult);
 
@@ -54,7 +51,7 @@ class FairyControllerTest extends ControllerTest {
                         get("/api/v1/fairies").param("chatRoomId", String.valueOf(chatRoomId)));
 
         // then
-        FairyResponse expectedResponse = new FairyResponse(candidates);
+        FairyResponse expectedResponse = new FairyResponse(fairyInfos);
 
         resultActions
                 .andExpect(status().isOk())

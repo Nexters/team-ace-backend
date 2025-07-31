@@ -1,4 +1,4 @@
-package com.nexters.teamace.fairy.application;
+package com.nexters.teamace.fairy.infrastructure.dto;
 
-public record FairyCandidate(
+public record FairyProjection(
         Long id, String name, String image, String silhouetteImage, String emotion) {}

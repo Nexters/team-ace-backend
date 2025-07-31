@@ -2,6 +2,7 @@ package com.nexters.teamace.common.presentation;
 
 import com.nexters.teamace.common.exception.CustomException;
 import com.nexters.teamace.common.exception.ErrorType;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 ApiResponse.error(ErrorType.RESOURCE_NOT_FOUND),
                 ErrorType.RESOURCE_NOT_FOUND.getStatus());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEntityNotFoundException(
+            NoResourceFoundException e) {
+        log.warn("Entity not found error occurred: {}", e.getMessage(), e);
+        return new ResponseEntity<>(
+                ApiResponse.error(ErrorType.ENTITY_NOT_FOUND),
+                ErrorType.ENTITY_NOT_FOUND.getStatus());
     }
 
     @ExceptionHandler(CustomException.class)
