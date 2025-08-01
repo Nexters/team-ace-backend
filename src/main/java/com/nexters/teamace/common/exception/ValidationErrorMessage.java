@@ -21,4 +21,9 @@ public class ValidationErrorMessage {
             "ChatRoom ID must be greater than or equal to 1";
     public static final String PREVIOUS_CHATS_NOT_NULL = "Previous chats cannot be null";
     public static final String CHAT_CONTEXT_NOT_NULL = "ChatContext cannot be null";
+
+    /** Fairy */
+    public static final String FAIRY_ID_NOT_NULL = "Fairy ID cannot be null";
+
+    public static final String USER_ID_NOT_NULL = "User ID cannot be null";
 }
