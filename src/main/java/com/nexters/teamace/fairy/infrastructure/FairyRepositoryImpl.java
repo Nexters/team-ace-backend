@@ -43,4 +43,9 @@ public class FairyRepositoryImpl implements FairyRepository {
     public List<FairyProjection> findAllByEmotionNames(List<String> emotionNames) {
         return fairyJpaRepository.findAllByEmotionNames(emotionNames);
     }
+
+    @Override
+    public List<Fairy> findAll() {
+        return fairyJpaRepository.findAll().stream().map(fairyMapper::toDomain).toList();
+    }
 }

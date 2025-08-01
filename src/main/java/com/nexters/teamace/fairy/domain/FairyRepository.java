@@ -9,5 +9,7 @@ public interface FairyRepository {
 
     Optional<Fairy> findById(Long id);
 
+    List<Fairy> findAll();
+
     List<FairyProjection> findAllByEmotionNames(List<String> emotionNames);
 }
