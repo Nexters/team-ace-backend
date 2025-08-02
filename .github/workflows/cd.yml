@@ -68,6 +68,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY_URL }}
             docker pull ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
             if [ $(docker ps -a -q --filter "ancestor=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}") ]; then
               docker stop $(docker ps -a -q --filter "ancestor=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}")
