@@ -28,6 +28,7 @@ jobs:
           sed -i 's/${DB_HOST:[^}]*}/${{ secrets.DB_HOST }}/g' src/main/resources/application.yml
           sed -i 's/${DB_USERNAME:[^}]*}/${{ secrets.DB_USERNAME }}/g' src/main/resources/application.yml
           sed -i 's/${DB_PASSWORD:[^}]*}/${{ secrets.DB_PASSWORD }}/g' src/main/resources/application.yml
+          sed -i 's/${GEMINI_API_KEY:[^}]*}/${{ secrets.GEMINI_API_KEY }}/g' src/main/resources/application.yml
 
       - name: Setup Gradle cache
         uses: actions/cache@v4
