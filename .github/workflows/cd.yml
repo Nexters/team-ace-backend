@@ -72,10 +72,21 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            CONTAINER_NAME=gamchi-app
+            NETWORK_NAME=gamchi-network
+            
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY_URL }}
             docker pull ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
-            if [ $(docker ps -a -q --filter "ancestor=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}") ]; then
-              docker stop $(docker ps -a -q --filter "ancestor=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}")
-              docker rm $(docker ps -a -q --filter "ancestor=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}")
+            
+            if [ $(docker ps -a -q --filter "name=$CONTAINER_NAME") ]; then
+              docker stop $CONTAINER_NAME
+              docker rm $CONTAINER_NAME
             fi
-            docker run -d -p 8080:8080 --name my-app-container ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+            
+            docker run -d \
+              --name $CONTAINER_NAME \
+              --network $NETWORK_NAME \
+              -p 8080:8080 \
+              ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+            
+            docker image prune -a -f
