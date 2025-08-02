@@ -1,18 +1,16 @@
 package com.nexters.teamace.emotion.domain;
 
-import static lombok.AccessLevel.PROTECTED;
-
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = PROTECTED)
+@Getter
 public class Emotion {
 
-    @Getter private Long id;
-    @Getter private String name;
-    @Getter private String description;
+    @Getter private final Long id;
+    @Getter private final String name;
+    @Getter private final String description;
 
     public Emotion(final String name, final String description) {
+        this.id = null;
         this.name = name;
         this.description = description;
     }
