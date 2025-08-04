@@ -8,6 +8,8 @@ public class ValidationErrorMessage {
     /** User */
     public static final String USERNAME_SIZE = "Username must be between 1 and 20 characters";
 
+    public static final String USER_ID_NOT_NULL = "User ID cannot be null";
+    public static final String USER_ID_POSITIVE = "User ID must be greater than or equal to 1";
     public static final String NICKNAME_SIZE = "Nickname must be between 1 and 20 characters";
     public static final String USERNAME_NOT_BLANK = "username must not be blank";
     public static final String NICKNAME_NOT_BLANK = "nickname must not be blank";
@@ -29,5 +31,4 @@ public class ValidationErrorMessage {
     public static final String FAIRY_ID_NOT_NULL = "Fairy ID cannot be null";
 
     public static final String FAIRY_ID_ID_POSITIVE = "Fairy ID must be greater than or equal to 1";
-    public static final String USER_ID_NOT_NULL = "User ID cannot be null";
 }

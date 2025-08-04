@@ -7,7 +7,9 @@ import com.nexters.teamace.chat.domain.ChatRoomRepository;
 import com.nexters.teamace.common.infrastructure.annotation.ReadOnlyTransactional;
 import com.nexters.teamace.user.application.GetUserResult;
 import com.nexters.teamace.user.application.UserService;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,12 @@ public class ChatRoomService {
     @ReadOnlyTransactional
     public AllChatResult getAllChats(final AllChatQuery query) {
         final ChatRoom chatRoom = chatRoomRepository.getById(query.chatRoomId());
+        if (!Objects.equals(chatRoom.getUserId(), query.userId())) {
+            // 고민: 403을 명백하게 주는 게 좋을지 404로 hide 처리하는 것이 좋을지
+            throw new AccessDeniedException(
+                    "Not authorized to access this chat room. chat userId: %s but query userId: %s"
+                            .formatted(chatRoom.getUserId(), query.userId()));
+        }
         return new AllChatResult(
                 chatRoom.getId(),
                 chatRoom.getChats().stream()
