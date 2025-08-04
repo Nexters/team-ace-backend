@@ -38,6 +38,7 @@ out/
 
 ### Spring ###
 application-local.yml
+spy.log
 
 ## Environment ##
 prompts/.env
