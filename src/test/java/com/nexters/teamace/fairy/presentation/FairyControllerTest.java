@@ -1,5 +1,6 @@
 package com.nexters.teamace.fairy.presentation;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.Schema.schema;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,7 +41,10 @@ class FairyControllerTest extends ControllerTest {
                 .willReturn(new UserInfo(1L, "test-user", "테스트유저"));
 
         List<FairyInfo> fairyInfos =
-                List.of(new FairyInfo(1L, "눈물방울 요정", "sad.png", "sad_sil.png", "슬픔"));
+                List.of(
+                        new FairyInfo(1L, "눈물방울 요정", "sadness.png", "sadness_sil.png", "슬픔"),
+                        new FairyInfo(2L, "화르르 요정", "anger.png", "anger_sil.png", "분노"),
+                        new FairyInfo(3L, "질투쟁이 요정", "jealousy.png", "jealousy_sil.png", "질투"));
         FairyResult fairyResult = new FairyResult(fairyInfos);
 
         given(fairyService.getFairy(any(UserInfo.class), any(Long.class))).willReturn(fairyResult);
@@ -67,6 +71,9 @@ class FairyControllerTest extends ControllerTest {
                                         ResourceSnippetParameters.builder()
                                                 .tag("Fairy")
                                                 .description("채팅방 기반 요정 추천 조회")
+                                                .queryParameters(
+                                                        parameterWithName("chatRoomId")
+                                                                .description("채팅방 ID"))
                                                 .responseFields(
                                                         fieldWithPath("success")
                                                                 .type(JsonFieldType.BOOLEAN)

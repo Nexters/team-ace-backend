@@ -38,9 +38,23 @@ class FairyBookControllerTest extends ControllerTest {
         given(authUserArgumentResolver.resolveArgument(any(), any(), any(), any()))
                 .willReturn(new UserInfo(1L, "test-user", "테스트유저"));
 
-        Fairy fairy = new Fairy(1L, "눈물방울 요정", "sad.png", "sad_sil.png", 1L);
-        FairyBookEntry fairyBookEntry = new FairyBookEntry(fairy, true);
-        FairyBook fairyBook = new FairyBook(List.of(fairyBookEntry));
+        FairyBook fairyBook =
+                new FairyBook(
+                        List.of(
+                                new FairyBookEntry(
+                                        new Fairy(1L, "눈물방울 요정", "sad.png", "sad_sil.png", 1L),
+                                        true),
+                                new FairyBookEntry(
+                                        new Fairy(2L, "화르르 요정", "anger.png", "anger_sil.png", 2L),
+                                        false),
+                                new FairyBookEntry(
+                                        new Fairy(
+                                                3L,
+                                                "질투쟁이 요정",
+                                                "jealousy.png",
+                                                "jealousy_sil.png",
+                                                3L),
+                                        true)));
 
         given(fairyService.getFairyBook(any(Long.class))).willReturn(fairyBook);
 
