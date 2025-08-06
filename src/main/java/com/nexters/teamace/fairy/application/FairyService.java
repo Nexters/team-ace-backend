@@ -11,6 +11,7 @@ import com.nexters.teamace.conversation.application.ConversationService;
 import com.nexters.teamace.conversation.domain.ConversationContextType;
 import com.nexters.teamace.conversation.domain.ConversationType;
 import com.nexters.teamace.conversation.domain.EmotionSelectConversation;
+import com.nexters.teamace.emotion.domain.EmotionType;
 import com.nexters.teamace.fairy.application.dto.FairyInfo;
 import com.nexters.teamace.fairy.domain.Fairy;
 import com.nexters.teamace.fairy.domain.FairyBook;
@@ -19,14 +20,13 @@ import com.nexters.teamace.fairy.domain.FairyRepository;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyEntity;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyJpaRepository;
 import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -37,73 +37,85 @@ public class FairyService {
     private final FairyRepository fairyRepository;
     private final AcquiredFairyJpaRepository acquiredFairyJpaRepository;
 
+    private static final String EMOTION_NAMES_STRING = EmotionType.getEmotionNames().toString();
+
     @ReadOnlyTransactional
     public FairyResult getFairy(UserInfo user, Long chatRoomId) {
-        AllChatResult allChats =
-            chatRoomService.getAllChats(new AllChatQuery(chatRoomId, user.userId()));
+        List<String> conversationHistory = getConversationHistory(user, chatRoomId);
 
-        List<String> conversationHistory =
-            allChats.chats().stream()
+        EmotionSelectConversation emotionSelectConversation = analyzeEmotions(conversationHistory);
+
+        List<FairyProjection> fairyProjections = findFairyCandidates(emotionSelectConversation);
+
+        List<FairyInfo> fairyInfos = convertToFairyInfo(fairyProjections);
+
+        return new FairyResult(fairyInfos);
+    }
+
+    private List<String> getConversationHistory(UserInfo user, Long chatRoomId) {
+        AllChatResult allChats =
+                chatRoomService.getAllChats(new AllChatQuery(chatRoomId, user.userId()));
+
+        return allChats.chats().stream()
                 .sorted(Comparator.comparing(AllChatResult.ChatResult::chatId))
                 .map(
-                    chat -> {
-                        String prefix =
-                            chat.type() == MessageType.USER ? "사용자: " : "상담가: ";
-                        return prefix + chat.message();
-                    })
+                        chat -> {
+                            String prefix = chat.type() == MessageType.USER ? "[사용자] " : "[상담가] ";
+                            return prefix + chat.message();
+                        })
                 .toList();
+    }
+
+    private EmotionSelectConversation analyzeEmotions(List<String> conversationHistory) {
         ConversationType type = ConversationType.EMOTION_ANALYSIS;
 
         Map<ConversationContextType, String> variables =
-            Map.of(
-                ConversationContextType.PREVIOUS_CONVERSATIONS,
-                String.join("\n", conversationHistory) // This should be populated from chat room history
-            );
+                Map.of(
+                        ConversationContextType.PREVIOUS_CONVERSATIONS,
+                        String.join("\n", conversationHistory),
+                        ConversationContextType.EMOTION_CANDIDATES,
+                        EMOTION_NAMES_STRING);
         ConversationContext context = new ConversationContext("질의응답", variables);
 
-        // 2. 질의응답 기반으로 ai call 해서 감정 후보 획득
-        EmotionSelectConversation emotionSelectConversation =
-            (EmotionSelectConversation) conversationService.chat(type.getType(), type, context);
+        return (EmotionSelectConversation) conversationService.chat(type.getType(), type, context);
+    }
 
-        // 3. 감정 후보 기반으로 fairy 후보 조회
-        List<FairyProjection> fairyProjections =
-            fairyRepository.findAllByEmotionNames(
+    private List<FairyProjection> findFairyCandidates(
+            EmotionSelectConversation emotionSelectConversation) {
+        return fairyRepository.findAllByEmotionNames(
                 emotionSelectConversation.emotions().stream()
-                    .map(EmotionSelectConversation.Emotions::name)
-                    .toList());
+                        .map(EmotionSelectConversation.Emotions::name)
+                        .toList());
+    }
 
-        // 4. FairyInfo로 변환
-        List<FairyInfo> fairyInfos =
-            fairyProjections.stream()
+    private List<FairyInfo> convertToFairyInfo(List<FairyProjection> fairyProjections) {
+        return fairyProjections.stream()
                 .map(
-                    p ->
-                        new FairyInfo(
-                            p.id(),
-                            p.name(),
-                            p.image(),
-                            p.silhouetteImage(),
-                            p.emotion()))
+                        p ->
+                                new FairyInfo(
+                                        p.id(),
+                                        p.name(),
+                                        p.image(),
+                                        p.silhouetteImage(),
+                                        p.emotion()))
                 .toList();
-
-        // 5. FairyResult에 맞게 정제하여 반환
-        return new FairyResult(fairyInfos);
     }
 
     @ReadOnlyTransactional
     public FairyBook getFairyBook(Long userId) {
         List<Fairy> allFairies = fairyRepository.findAll();
         Set<Long> acquiredFairyIds =
-            acquiredFairyJpaRepository.findAllByUserId(userId).stream()
-                .map(AcquiredFairyEntity::getFairyId)
-                .collect(Collectors.toSet());
+                acquiredFairyJpaRepository.findAllByUserId(userId).stream()
+                        .map(AcquiredFairyEntity::getFairyId)
+                        .collect(Collectors.toSet());
 
         List<FairyBookEntry> fairyBookEntries =
-            allFairies.stream()
-                .map(
-                    fairy ->
-                        new FairyBookEntry(
-                            fairy, acquiredFairyIds.contains(fairy.getId())))
-                .toList();
+                allFairies.stream()
+                        .map(
+                                fairy ->
+                                        new FairyBookEntry(
+                                                fairy, acquiredFairyIds.contains(fairy.getId())))
+                        .toList();
 
         return new FairyBook(fairyBookEntries);
     }
