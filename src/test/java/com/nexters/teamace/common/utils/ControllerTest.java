@@ -10,6 +10,7 @@ import com.nexters.teamace.auth.infrastructure.security.JwtAuthenticationFilter;
 import com.nexters.teamace.auth.infrastructure.security.SecurityErrorHandler;
 import com.nexters.teamace.auth.presentation.AuthUserArgumentResolver;
 import com.nexters.teamace.chat.application.ChatRoomService;
+import com.nexters.teamace.common.infrastructure.SlackAlertService;
 import com.nexters.teamace.common.presentation.GlobalExceptionHandler;
 import com.nexters.teamace.conversation.application.ConversationClient;
 import com.nexters.teamace.conversation.application.ConversationService;
@@ -45,6 +46,7 @@ public abstract class ControllerTest {
     @MockitoBean protected FairyService fairyService;
     @MockitoBean protected AuthUserArgumentResolver authUserArgumentResolver;
     @MockitoBean protected LetterService letterService;
+    @MockitoBean protected SlackAlertService slackAlertService;
 
     protected Object asParsedJson(Object obj) throws JsonProcessingException {
         String json = objectMapper.writeValueAsString(obj);

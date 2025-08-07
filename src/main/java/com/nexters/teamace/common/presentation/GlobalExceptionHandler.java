@@ -1,11 +1,13 @@
 package com.nexters.teamace.common.presentation;
 
+import com.nexters.teamace.common.application.AlertService;
 import com.nexters.teamace.common.exception.CustomException;
 import com.nexters.teamace.common.exception.ErrorType;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,7 +22,10 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final AlertService alertService;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValid(
@@ -149,6 +154,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         log.error("Unexpected error occurred: ", e);
+        alertService.error(ErrorType.INTERNAL_SERVER_ERROR, e.getMessage());
         return new ResponseEntity<>(
                 ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR),
                 ErrorType.INTERNAL_SERVER_ERROR.getStatus());

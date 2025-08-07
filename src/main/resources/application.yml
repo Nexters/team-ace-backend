@@ -25,6 +25,9 @@ spring:
       chat: none # 기본 모델 설정 비활성화
     openai:
       api-key: ${OPENAI_API_KEY:fake-key} # 기본 모델을 비활성화해도 필수값으로 받음.
+  threads:
+    virtual:
+      enabled: true
 
 management:
   endpoints:
@@ -49,3 +52,7 @@ jwt:
 gemini:
   api-key: ${GEMINI_API_KEY:test-api-key}
   model: gemini-2.0-flash-exp
+
+slack:
+  enabled: true
+  webhook-url: ${SLACK_WEBHOOK_URL:}

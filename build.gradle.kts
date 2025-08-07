@@ -97,6 +97,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus")
 
+    // slack
+    implementation("com.slack.api:slack-api-client:1.45.3")
+
     // restdocs-api-spec
     testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

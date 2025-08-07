@@ -24,3 +24,6 @@ jwt:
 gemini:
   api-key: test-api-key
   model: gemini-2.0-flash-exp
+
+slack:
+  enabled: false
