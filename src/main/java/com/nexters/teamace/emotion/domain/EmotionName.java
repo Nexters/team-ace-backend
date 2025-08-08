@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum EmotionType {
+public enum EmotionName {
     ANGER("분노"),
     SADNESS("슬픔"),
     JEALOUSY("질투"),
@@ -20,11 +20,11 @@ public enum EmotionType {
     SOLITUDE("고독"),
     SHAME("부끄러움");
 
-    private final String description;
-    private static final List<String> EMOTION_NAMES =
-            Arrays.stream(values()).map(EmotionType::name).toList();
+    private final String displayName;
+    private static final List<String> NAMES =
+            Arrays.stream(values()).map(EmotionName::name).toList();
 
-    public static List<String> getEmotionNames() {
-        return EMOTION_NAMES;
+    public static List<String> getNames() {
+        return NAMES;
     }
 }

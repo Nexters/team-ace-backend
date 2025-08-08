@@ -1,7 +1,7 @@
 package com.nexters.teamace.emotion.infrastructure;
 
 import com.nexters.teamace.common.infrastructure.entity.BaseEntity;
-import com.nexters.teamace.emotion.domain.EmotionType;
+import com.nexters.teamace.emotion.domain.EmotionName;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,12 +16,12 @@ public class EmotionEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true, length = 255)
-    private EmotionType name;
+    private EmotionName name;
 
     private String description;
 
     @Builder
-    public EmotionEntity(long id, EmotionType name, String description) {
+    public EmotionEntity(long id, EmotionName name, String description) {
         super(id);
         this.name = name;
         this.description = description;

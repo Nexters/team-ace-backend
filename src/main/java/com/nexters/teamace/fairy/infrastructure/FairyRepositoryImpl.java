@@ -1,6 +1,6 @@
 package com.nexters.teamace.fairy.infrastructure;
 
-import com.nexters.teamace.emotion.domain.EmotionType;
+import com.nexters.teamace.emotion.domain.EmotionName;
 import com.nexters.teamace.emotion.infrastructure.EmotionEntity;
 import com.nexters.teamace.emotion.infrastructure.EmotionJpaRepository;
 import com.nexters.teamace.fairy.domain.Fairy;
@@ -41,7 +41,7 @@ public class FairyRepositoryImpl implements FairyRepository {
     }
 
     @Override
-    public List<FairyProjection> findAllByEmotionNames(List<EmotionType> emotionNames) {
+    public List<FairyProjection> findAllByEmotionNames(List<EmotionName> emotionNames) {
         return fairyJpaRepository.findAllByEmotionNames(emotionNames);
     }
 

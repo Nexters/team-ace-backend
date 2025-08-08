@@ -11,7 +11,7 @@ import com.nexters.teamace.conversation.application.ConversationService;
 import com.nexters.teamace.conversation.domain.ConversationContextType;
 import com.nexters.teamace.conversation.domain.ConversationType;
 import com.nexters.teamace.conversation.domain.EmotionSelectConversation;
-import com.nexters.teamace.emotion.domain.EmotionType;
+import com.nexters.teamace.emotion.domain.EmotionName;
 import com.nexters.teamace.fairy.application.dto.FairyInfo;
 import com.nexters.teamace.fairy.domain.Fairy;
 import com.nexters.teamace.fairy.domain.FairyBook;
@@ -20,7 +20,6 @@ import com.nexters.teamace.fairy.domain.FairyRepository;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyEntity;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyJpaRepository;
 import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class FairyService {
     private final FairyRepository fairyRepository;
     private final AcquiredFairyJpaRepository acquiredFairyJpaRepository;
 
-    private static final String EMOTION_NAMES_STRING = EmotionType.getEmotionNames().toString();
+    private static final String EMOTION_NAMES_STRING = EmotionName.getNames().toString();
 
     @ReadOnlyTransactional
     public FairyResult getFairy(UserInfo user, Long chatRoomId) {
@@ -82,10 +81,11 @@ public class FairyService {
 
     private List<FairyProjection> findFairyCandidates(
             EmotionSelectConversation emotionSelectConversation) {
-        var emotions = emotionSelectConversation.emotions().stream()
-            .map(e -> EmotionType.valueOf(e.name()))
-            .distinct()
-            .toList();
+        var emotions =
+                emotionSelectConversation.emotions().stream()
+                        .map(e -> EmotionName.valueOf(e.name()))
+                        .distinct()
+                        .toList();
         if (emotions.isEmpty()) {
             return List.of();
         }
@@ -101,7 +101,7 @@ public class FairyService {
                                         p.name(),
                                         p.image(),
                                         p.silhouetteImage(),
-                                        p.emotion().getDescription()))
+                                        p.emotionName().getDisplayName()))
                 .toList();
     }
 

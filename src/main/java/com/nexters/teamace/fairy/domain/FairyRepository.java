@@ -1,7 +1,7 @@
 package com.nexters.teamace.fairy.domain;
 
 import com.nexters.teamace.common.exception.CustomException;
-import com.nexters.teamace.emotion.domain.EmotionType;
+import com.nexters.teamace.emotion.domain.EmotionName;
 import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface FairyRepository {
 
     List<Fairy> findAll();
 
-    List<FairyProjection> findAllByEmotionNames(List<EmotionType> emotionNames);
+    List<FairyProjection> findAllByEmotionNames(List<EmotionName> emotionNames);
 
     default Fairy getById(Long id) {
         return findById(id).orElseThrow(() -> CustomException.FAIRY_NOT_FOUND);
