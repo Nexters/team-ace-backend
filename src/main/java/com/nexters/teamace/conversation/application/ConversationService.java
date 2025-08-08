@@ -19,7 +19,7 @@ public class ConversationService {
             final Class<T> type,
             final ConversationType conversationType,
             final ConversationContext context) {
-        return chat(type, conversationType, context, null);
+        return chat(type, conversationType, context, ".");
     }
 
     public <T> T chat(
