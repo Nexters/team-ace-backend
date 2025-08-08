@@ -1,5 +1,6 @@
 package com.nexters.teamace.fairy.infrastructure;
 
+import com.nexters.teamace.emotion.domain.EmotionType;
 import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,6 @@ public interface FairyJpaRepository extends JpaRepository<FairyEntity, Long> {
             "SELECT new com.nexters.teamace.fairy.infrastructure.dto.FairyProjection(f.id, f.name, f.imageUrl, f.silhouetteImageUrl, e.name) "
                     + "FROM FairyEntity f JOIN f.emotion e "
                     + "WHERE e.name IN :emotionNames")
-    List<FairyProjection> findAllByEmotionNames(@Param("emotionNames") List<String> emotionNames);
+    List<FairyProjection> findAllByEmotionNames(
+            @Param("emotionNames") List<EmotionType> emotionNames);
 }

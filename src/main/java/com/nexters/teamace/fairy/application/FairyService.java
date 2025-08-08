@@ -20,16 +20,16 @@ import com.nexters.teamace.fairy.domain.FairyRepository;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyEntity;
 import com.nexters.teamace.fairy.infrastructure.AcquiredFairyJpaRepository;
 import com.nexters.teamace.fairy.infrastructure.dto.FairyProjection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FairyService {
 
     private final ConversationService conversationService;
@@ -82,10 +82,14 @@ public class FairyService {
 
     private List<FairyProjection> findFairyCandidates(
             EmotionSelectConversation emotionSelectConversation) {
-        return fairyRepository.findAllByEmotionNames(
-                emotionSelectConversation.emotions().stream()
-                        .map(EmotionSelectConversation.Emotions::name)
-                        .toList());
+        var emotions = emotionSelectConversation.emotions().stream()
+            .map(e -> EmotionType.valueOf(e.name()))
+            .distinct()
+            .toList();
+        if (emotions.isEmpty()) {
+            return List.of();
+        }
+        return fairyRepository.findAllByEmotionNames(emotions);
     }
 
     private List<FairyInfo> convertToFairyInfo(List<FairyProjection> fairyProjections) {
@@ -97,7 +101,7 @@ public class FairyService {
                                         p.name(),
                                         p.image(),
                                         p.silhouetteImage(),
-                                        p.emotion()))
+                                        p.emotion().getDescription()))
                 .toList();
     }
 
