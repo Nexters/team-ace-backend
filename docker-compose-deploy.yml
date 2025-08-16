@@ -10,6 +10,7 @@ services:
       MYSQL_DATABASE: gamchi
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -34,6 +35,8 @@ services:
     networks:
       - gamchi-network
     restart: always
+    env_file:
+      - .env
 
 volumes:
   mysql_data:

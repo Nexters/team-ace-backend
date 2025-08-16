@@ -20,15 +20,6 @@ jobs:
           java-version: '24'
           distribution: 'oracle'
 
-      - name: Replace placeholders with secrets
-        run: |
-          sed -i 's/${JWT_SECRET:[^}]*}/${{ secrets.JWT_SECRET }}/g' src/main/resources/application.yml
-          sed -i 's/${DB_HOST:[^}]*}/${{ secrets.DB_HOST }}/g' src/main/resources/application.yml
-          sed -i 's/${DB_USERNAME:[^}]*}/${{ secrets.DB_USERNAME }}/g' src/main/resources/application.yml
-          sed -i 's/${DB_PASSWORD:[^}]*}/${{ secrets.DB_PASSWORD }}/g' src/main/resources/application.yml
-          sed -i 's/${GEMINI_API_KEY:[^}]*}/${{ secrets.GEMINI_API_KEY }}/g' src/main/resources/application.yml
-          sed -i 's|${SLACK_WEBHOOK_URL:[^}]*}|${{ secrets.SLACK_WEBHOOK_URL }}|g' src/main/resources/application.yml
-
       - name: Setup Gradle cache
         uses: actions/cache@v4
         with:
@@ -96,8 +87,13 @@ jobs:
             fi
 
             echo "IMAGE_TAG=${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}" > .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
             echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+            echo "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}" >> .env
 
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY_URL }}
 
