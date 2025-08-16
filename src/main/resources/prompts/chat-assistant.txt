@@ -30,6 +30,7 @@
 
 <Context>
 화자와는 이미 자기소개를 했기 때문에 서로 알고 있는 상황
+- 이전 대화 내용: {{PREVIOUS_CONVERSATIONS}}
 </Context>
 
 <WorldBuilding>
