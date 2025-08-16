@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface FairyJpaRepository extends JpaRepository<FairyEntity, Long> {
 
     @Query(
-            "SELECT new com.nexters.teamace.fairy.infrastructure.dto.FairyProjection(f.id, f.name, f.imageUrl, f.silhouetteImageUrl, e.name) "
+            "SELECT new com.nexters.teamace.fairy.infrastructure.dto.FairyProjection(f.id, f.name, f.imageUrl, f.silhouetteImageUrl, e.name, e.description) "
                     + "FROM FairyEntity f JOIN f.emotion e "
                     + "WHERE e.name IN :emotionNames")
     List<FairyProjection> findAllByEmotionNames(

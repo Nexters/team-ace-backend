@@ -42,9 +42,17 @@ class FairyControllerTest extends ControllerTest {
 
         List<FairyInfo> fairyInfos =
                 List.of(
-                        new FairyInfo(1L, "눈물방울 요정", "sadness.png", "sadness_sil.png", "슬픔"),
-                        new FairyInfo(2L, "화르르 요정", "anger.png", "anger_sil.png", "분노"),
-                        new FairyInfo(3L, "질투쟁이 요정", "jealousy.png", "jealousy_sil.png", "질투"));
+                        new FairyInfo(
+                                1L, "눈물방울 요정", "sadness.png", "sadness_sil.png", "슬픔", "너무 슬프다는 뜻"),
+                        new FairyInfo(
+                                2L, "화르르 요정", "anger.png", "anger_sil.png", "분노", "너무 화가 난다는 뜻"),
+                        new FairyInfo(
+                                3L,
+                                "질투쟁이 요정",
+                                "jealousy.png",
+                                "jealousy_sil.png",
+                                "질투",
+                                "매우 질투가 난다는 뜻"));
         FairyResult fairyResult = new FairyResult(fairyInfos);
 
         given(fairyService.getFairy(any(UserInfo.class), any(Long.class))).willReturn(fairyResult);
@@ -97,6 +105,10 @@ class FairyControllerTest extends ControllerTest {
                                                         fieldWithPath("data.fairies[].emotion")
                                                                 .type(JsonFieldType.STRING)
                                                                 .description("관련 감정"),
+                                                        fieldWithPath(
+                                                                        "data.fairies[].emotionDescription")
+                                                                .type(JsonFieldType.STRING)
+                                                                .description("관련 감정에 대한 상세 설명"),
                                                         fieldWithPath("error")
                                                                 .type(JsonFieldType.NULL)
                                                                 .description("에러 정보 (성공 시 null)"))

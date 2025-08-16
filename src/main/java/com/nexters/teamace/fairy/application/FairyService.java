@@ -101,7 +101,8 @@ public class FairyService {
                                         p.name(),
                                         p.image(),
                                         p.silhouetteImage(),
-                                        p.emotionName().getDisplayName()))
+                                        p.emotionName().getDisplayName(),
+                                        p.emotionDescription()))
                 .toList();
     }
 
