@@ -2,6 +2,7 @@ package com.nexters.teamace.auth.application;
 
 import static com.nexters.teamace.common.exception.ValidationErrorMessage.*;
 
+import com.nexters.teamace.user.domain.User;
 import org.springframework.util.StringUtils;
 
 public record LoginCommand(String username) {
@@ -9,7 +10,7 @@ public record LoginCommand(String username) {
         if (!StringUtils.hasText(username)) {
             throw new IllegalArgumentException(USERNAME_NOT_BLANK);
         }
-        if (username.length() > 20) {
+        if (username.length() > User.MAX_USERNAME_LENGTH) {
             throw new IllegalArgumentException(USERNAME_SIZE);
         }
     }

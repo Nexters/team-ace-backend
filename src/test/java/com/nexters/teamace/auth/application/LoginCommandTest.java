@@ -50,17 +50,17 @@ class LoginCommandTest {
     }
 
     @Nested
-    @DisplayName("20자보다 긴 사용자명으로 생성할 때")
+    @DisplayName("50자보다 긴 사용자명으로 생성할 때")
     class Context_when_creating_with_username_longer_than_20_characters {
 
         @Test
         @DisplayName("IllegalArgumentException을 던진다")
         void it_throws_IllegalArgumentException() {
-            final String longUsername = "a".repeat(21);
+            final String longUsername = "a".repeat(51);
 
             thenThrownBy(() -> new LoginCommand(longUsername))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("Username must be between 1 and 20 characters");
+                    .hasMessage("Username must be between 1 and 50 characters");
         }
     }
 }

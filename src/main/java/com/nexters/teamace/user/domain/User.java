@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
+    public static final int MAX_USERNAME_LENGTH = 50;
+    public static final int MAX_NICKNAME_LENGTH = 20;
 
     @Getter @EqualsAndHashCode.Include private Long id;
     @Getter private String username;
