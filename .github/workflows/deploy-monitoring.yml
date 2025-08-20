@@ -1,0 +1,51 @@
+name: Deploy Monitoring
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-monitoring:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Create monitoring .env file
+        working-directory: monitoring
+        run: |
+          echo "PROMETHEUS_CONFIG_FILE_PATH=./prometheus/prometheus.yml" > .env
+          echo "GRAFANA_ADMIN_USER=${{ secrets.GRAFANA_ADMIN_USER }}" >> .env
+          echo "GRAFANA_ADMIN_PASSWORD=${{ secrets.GRAFANA_ADMIN_PASSWORD }}" >> .env
+
+      - name: Upload Monitoring Files to Server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "monitoring/"
+          target: "~/monitoring/"
+          overwrite: true
+          debug: true
+
+      - name: Apply Docker Compose Configuration
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            DEPLOY_DIR=~/monitoring
+            mkdir -p $DEPLOY_DIR
+            cd $DEPLOY_DIR
+
+            echo "Applying docker-compose configuration for monitoring..."
+            docker compose pull
+            docker compose up -d
+            echo "Monitoring services deployed successfully."
