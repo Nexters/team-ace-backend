@@ -10,7 +10,7 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     scrape_interval: 15s
     static_configs:
-      - targets: ['app:8080']
+      - targets: ['gamchi-app:8080']
     metric_relabel_configs:
       - source_labels: [uri]
         regex: "/actuator.*"

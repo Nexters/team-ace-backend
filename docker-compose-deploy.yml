@@ -45,3 +45,4 @@ volumes:
 networks:
   gamchi-network:
     driver: bridge
+    name: gamchi-network

@@ -32,4 +32,4 @@ services:
 
 networks:
   gamchi-network:
-    driver: bridge
+    external: true
