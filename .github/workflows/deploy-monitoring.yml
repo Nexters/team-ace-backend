@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'monitoring/**'
+      - '.github/workflows/deploy-monitoring.yml'
   workflow_dispatch:
 
 jobs:
@@ -29,7 +32,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "monitoring/"
-          target: "~/monitoring/"
+          target: "~/"
           overwrite: true
           debug: true
 
